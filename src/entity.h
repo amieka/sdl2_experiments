@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL_image.h>
-
+#include <vector>
 #define VELX 10
 
 enum EntityType { PLAYER, BACKGROUND };
@@ -26,6 +26,8 @@ struct Entity {
   EntityType item_type;
   CurrentState current_state;
   SDL_Renderer* current_renderer;
+  std::vector<SDL_Rect> frames;
+  std::vector<SDL_Texture*> tex_frames;
   void Init();
   void Blit();
   void Move();

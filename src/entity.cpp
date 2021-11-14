@@ -1,24 +1,13 @@
 #include "entity.h"
 
 #include <string>
-// std::string backgrounds[11] = {
-//     "_01_ground.png",         "_02_trees_bushes.png",
-//     "_03_distant_trees.png",
-//     "_04_bushes.png",         "_05_hill1.png",        "_06_hill2.png",
-//     "_07_huge_clouds.png",    "_08_clouds.png", "_09_distant_clouds1.png",
-//     "_10_distant_clouds.png", "_11_background.png",
-// };
 
 // TODO: belongs else where
 std::string backgrounds[2] = {"_02_trees_bushes.png", "_02_trees_bushes.png"};
 
-void Entity::Move() {
-	x += velx;	
-}
+void Entity::Move() { x += velx; }
 
-void Entity::Render() {
-	Blit();
-}
+void Entity::Render() { Blit(); }
 
 void Entity::UpdateState(SDL_Event event, CurrentState updated_state) {
   current_state = updated_state;
@@ -39,6 +28,7 @@ void Entity::UpdateState(SDL_Event event, CurrentState updated_state) {
       }
       break;
     case SDL_KEYUP:
+      current_state = CurrentState::STILL;
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
           if (item_type == 0) {
@@ -67,22 +57,35 @@ void Entity::Blit() {
   dest.y = y;
   dest.w = w;
   dest.h = h;
-  if (item_type == 0) {
-    // SDL_RenderClear(current_renderer);
-    printf("pos_x: %d , pos_y: %d, w: %d, h: %d\n", x, y, w, h);
-  }
 
-  //SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
   SDL_RenderCopy(current_renderer, texture, NULL, &dest);
+  // SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 }
 
 void Entity::Init() {
   std::string asset_path;
+  frames.clear();
   // should use a texture id to load textures
-  if (item_type == EntityType::BACKGROUND) {
+  if (item_type == 1) {
     asset_path = "../assets/" + backgrounds[0];
   } else {
     asset_path = "../assets/run_0.png";
+    // load all the frames here
+    for (int idx = 0; idx < 8; idx++) {
+      SDL_Rect frame;
+      frame.x = 0;
+      frame.y = 0;
+      std::string frame_path = "../assets/run_" + std::to_string(idx) + ".png";
+      SDL_Texture* texture_frame =
+          IMG_LoadTexture(current_renderer, frame_path.c_str());
+      SDL_QueryTexture(texture_frame, NULL, NULL, &frame.w, &frame.h);
+      printf("%d %d\n", frame.w, frame.h);
+      frames.push_back(frame);
+      tex_frames.push_back(texture_frame);
+      SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
+                     "Loading %s", frame_path.c_str());
+      free(texture_frame);
+    }
   }
   SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
                  "Loading %s", asset_path.c_str());
