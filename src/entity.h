@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL_image.h>
+
 #include <vector>
 #define VELX 10
 
@@ -31,8 +32,8 @@ struct Entity {
   void Init();
   void Blit();
   void Move();
-  void Render();
-  void UpdateState(SDL_Event e,CurrentState updated_state);
+  void Render(int cam_x, int cam_y);
+  void UpdateState(SDL_Event e, CurrentState updated_state);
   Entity(EntityType obj_type, int pos_x, int pos_y, int width, int height,
          int texture_id, SDL_Renderer* renderer) {
     item_type = obj_type;

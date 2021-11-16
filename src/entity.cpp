@@ -5,9 +5,24 @@
 // TODO: belongs else where
 std::string backgrounds[2] = {"_02_trees_bushes.png", "_02_trees_bushes.png"};
 
-void Entity::Move() { x += velx; }
+void Entity::Move() {
+  x += velx;
+  if ((x < 0) || (x + w > 1280)) {
+    // Move back
+    x -= velx;
+  }
+}
 
-void Entity::Render() { Blit(); }
+void Entity::Render(int cam_x, int cam_y) {
+  SDL_Rect dest;
+
+  dest.x = x - cam_x;
+  dest.y = y;
+  dest.w = w;
+  dest.h = h;
+
+  SDL_RenderCopy(current_renderer, texture, NULL, &dest);
+}
 
 void Entity::UpdateState(SDL_Event event, CurrentState updated_state) {
   current_state = updated_state;

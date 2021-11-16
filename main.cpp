@@ -8,17 +8,12 @@
 #define FPS 60.00
 
 #include "src/scene.h"
-#define LEVEL_WIDTH 1200
-#define LEVEL_HEIGHT 480
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 483
 
 struct Game {
   SDL_Window* window;
   SDL_Renderer* renderer;
   Scene current_scene;
   SDL_Texture* texture;
-  SDL_Rect camera_rect;
   int x, y;
 
   void Init();
@@ -39,10 +34,6 @@ void Game::Init() {
   IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
   x = 0;
   y = 0;
-  camera_rect.x = 0;
-  camera_rect.y = 0;
-  camera_rect.w = SCREEN_WIDTH;
-  camera_rect.h = SCREEN_HEIGHT;
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cout << "Failed to initialize the SDL2 library\n";
     return;
@@ -57,9 +48,7 @@ void Game::Init() {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 
-void Game::CreateScene() {
-  current_scene.LoadEntities(renderer);
-}
+void Game::CreateScene() { current_scene.LoadEntities(renderer); }
 
 void Game::UpdateScene(SDL_Event e) {
   // update game state for all the entities
@@ -77,19 +66,14 @@ void Game::LoadTexture() {
   SDL_RenderCopy(renderer, texture, NULL, &dest);
 }
 
-void Game::UpdateBackground() {
-  printf("background updated with pos, %d %d", camera_rect.x, camera_rect.y);
-  SDL_RenderCopy(renderer, texture, NULL, &camera_rect);
-}
-
 void Game::PrepareScene() {
   SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
   SDL_RenderClear(renderer);
 }
 
 void Game::PresentScene() {
-  LoadTexture(); // loads the background
-  current_scene.Blit(); // renders all the entities
+  // LoadTexture();         // loads the background
+  current_scene.Blit();  // renders all the entities
   SDL_RenderPresent(renderer);
   SDL_UpdateWindowSurface(window);
 }
@@ -107,8 +91,6 @@ void Game::HandleInput() {
 
 int main() {
   Scene scene;
-  scene.width = 640;   // 2048;
-  scene.height = 483;  // 1546;
 
   Game game(scene);
   game.CreateScene();
@@ -119,8 +101,6 @@ int main() {
     game.PresentScene();
 
     game.HandleInput();
-
-    // game.DrawRect();
 
     SDL_Delay(16);
   }
