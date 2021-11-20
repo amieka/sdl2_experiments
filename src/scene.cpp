@@ -14,7 +14,11 @@ void Scene::Init() {
 void Scene::RenderBackground() {
   std::string asset_path = "../assets/_02_trees_bushes.png";
   SDL_Texture* texture = IMG_LoadTexture(current_renderer, asset_path.c_str());
-  SDL_RenderCopy(current_renderer, texture, NULL, &camera);
+  SDL_Rect renderQuad = {0, 0, 640, 483};
+  SDL_Point* center = NULL;
+  SDL_RendererFlip flip = SDL_FLIP_NONE;
+  SDL_RenderCopyEx(current_renderer, texture, &camera, &renderQuad, 0.00,
+                   center, flip);
 }
 
 void Scene::UpdateCamera(int x, int y, int w, int h) {
@@ -41,7 +45,7 @@ void Scene::UpdateCamera(int x, int y, int w, int h) {
 void Scene::LoadEntities(SDL_Renderer* renderer) {
   // Player 1
 
-  Entity player(EntityType::PLAYER, 0, 0, 21, 33, 0, renderer);
+  Entity player(EntityType::PLAYER, 0, 240, 21, 33, 0, renderer);
   // Background
   entities.push_back(player);
   // entities.push_back(background);
