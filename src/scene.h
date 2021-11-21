@@ -19,8 +19,10 @@ struct Scene {
   int width;
   int height;
   std::vector<Entity> entities;
+  std::vector<SDL_Texture*> backgrounds;
   SDL_Rect camera;
   SDL_Renderer* current_renderer;
+  SDL_Texture* current_texture;
   std::vector<Entity> GetEntities() const;
   void RenderBackground();
   void LoadEntities(SDL_Renderer* renderer);

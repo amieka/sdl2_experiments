@@ -12,13 +12,20 @@ void Scene::Init() {
 }
 
 void Scene::RenderBackground() {
-  std::string asset_path = "../assets/_02_trees_bushes.png";
-  SDL_Texture* texture = IMG_LoadTexture(current_renderer, asset_path.c_str());
   SDL_Rect renderQuad = {0, 0, 640, 483};
   SDL_Point* center = NULL;
   SDL_RendererFlip flip = SDL_FLIP_NONE;
-  SDL_RenderCopyEx(current_renderer, texture, &camera, &renderQuad, 0.00,
-                   center, flip);
+  SDL_RenderCopyEx(current_renderer, current_texture, &camera, &renderQuad,
+                   0.00, center, flip);
+
+  // 3 layered backgrounds
+  // render the cloud
+
+  // render the distant cloud
+
+  // render the trees
+
+  // render the player
 }
 
 void Scene::UpdateCamera(int x, int y, int w, int h) {
@@ -44,21 +51,33 @@ void Scene::UpdateCamera(int x, int y, int w, int h) {
 
 void Scene::LoadEntities(SDL_Renderer* renderer) {
   // Player 1
-
-  Entity player(EntityType::PLAYER, 0, 240, 21, 33, 0, renderer);
-  // Background
-  entities.push_back(player);
-  // entities.push_back(background);
-
+  backgrounds.clear();
   current_renderer = renderer;
+  Entity player(EntityType::PLAYER, 0, 240, 21, 33, 0, current_renderer);
+  entities.push_back(player);
+
+  std::string asset_path = "../assets/longer_background.png";
+  current_texture = IMG_LoadTexture(current_renderer, asset_path.c_str());
+  // grab all the backgrounds
+  const std::string backgrounds_path[4] = {
+      "_11_background.png", "_10_distant_clouds.png", "_12_trees_bushes.png",
+      "_01_ground.png"};
+  for (int idx = 0; idx < 4; idx++) {
+    std::string background_path = "../assets/" + backgrounds_path[idx];
+    SDL_Texture* bg_texture =
+        IMG_LoadTexture(current_renderer, background_path.c_str());
+    if (bg_texture != NULL) {
+      backgrounds.push_back(bg_texture);
+    }
+  }
 }
 
 std::vector<Entity> Scene::GetEntities() const { return entities; }
 
 void Scene::Update(SDL_Event e) {
-  int a = 0;
+  Entity current;
   for (int idx = 0; idx < entities.size(); idx++) {
-    Entity current = entities[idx];
+    current = entities[idx];
     // printf("entity type : %u\n", current.item_type);
     if (current.item_type == 0) {
       current.UpdateState(e, CurrentState::RUNNING);
@@ -69,9 +88,7 @@ void Scene::Update(SDL_Event e) {
 
     UpdateCamera(current.GetX(), current.GetY(), entities[idx].w,
                  entities[idx].h);
-    current.Render(camera.x, camera.y);
   }
-  RenderBackground();
 }
 
 void Scene::Blit() {
@@ -79,5 +96,4 @@ void Scene::Blit() {
     Entity current = entities[idx];
     current.Render(camera.x, camera.y);
   }
-  RenderBackground();
 }

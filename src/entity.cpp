@@ -78,38 +78,13 @@ void Entity::Blit() {
 }
 
 void Entity::Init() {
-  std::string asset_path;
-  frames.clear();
-  // should use a texture id to load textures
-  if (item_type == 1) {
-    asset_path = "../assets/" + backgrounds[0];
-  } else {
-    asset_path = "../assets/run_0.png";
-    // load all the frames here
-    for (int idx = 0; idx < 8; idx++) {
-      SDL_Rect frame;
-      frame.x = 0;
-      frame.y = 0;
-      std::string frame_path = "../assets/run_" + std::to_string(idx) + ".png";
-      SDL_Texture* texture_frame =
-          IMG_LoadTexture(current_renderer, frame_path.c_str());
-      SDL_QueryTexture(texture_frame, NULL, NULL, &frame.w, &frame.h);
-      printf("%d %d\n", frame.w, frame.h);
-      frames.push_back(frame);
-      tex_frames.push_back(texture_frame);
-      SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
-                     "Loading %s", frame_path.c_str());
-      free(texture_frame);
-    }
-  }
+  std::string asset_path = "../assets/run_0.png";
   SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
                  "Loading %s", asset_path.c_str());
   texture = IMG_LoadTexture(current_renderer, asset_path.c_str());
   if (texture == NULL) {
     printf("texture not loaded\n");
   }
-
-  Blit();
 }
 
 int Entity::GetX() const { return x; }

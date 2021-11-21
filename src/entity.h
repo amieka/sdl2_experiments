@@ -34,6 +34,7 @@ struct Entity {
   void Move();
   void Render(int cam_x, int cam_y);
   void UpdateState(SDL_Event e, CurrentState updated_state);
+  Entity() {}
   Entity(EntityType obj_type, int pos_x, int pos_y, int width, int height,
          int texture_id, SDL_Renderer* renderer) {
     item_type = obj_type;
