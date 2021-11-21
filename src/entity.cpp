@@ -43,7 +43,7 @@ void Entity::UpdateState(SDL_Event event, CurrentState updated_state) {
       }
       break;
     case SDL_KEYUP:
-      current_state = CurrentState::STILL;
+      current_state = STILL;
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
           if (item_type == 0) {

@@ -46,7 +46,7 @@ struct Entity {
     h = height;
     tid = texture_id;
     current_renderer = renderer;
-    current_state = CurrentState::STILL;
+    current_state = STILL;
     Init();
   }
 };
