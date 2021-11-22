@@ -1,74 +1,5 @@
 #include "scene.h"
 
-// Texture definitions begin
-
-void Texture::Render(int x, int y) {
-  // render texture using a renderer
-  SDL_Rect render_quad = {x, y, SCREEN_WIDTH, SCREEN_HEIGHT};
-  SDL_Point* center = NULL;
-  SDL_RendererFlip flip = SDL_FLIP_NONE;
-  SDL_RenderCopyEx(current_renderer, current_texture, NULL, &render_quad, 0.00,
-                   center, flip);
-}
-
-int Texture::GetWidth() const { return width; }
-int Texture::GetHeight() const { return height; }
-
-void Texture::Init(std::string texture_name) {
-  std::string texture_path = "../assets/" + texture_name;
-  SDL_Surface* img_surface = IMG_Load(texture_path.c_str());
-  // set color key to RGBA
-  SDL_SetColorKey(img_surface, SDL_TRUE,
-                  SDL_MapRGB(img_surface->format, 0, 0xFF, 0xFF));
-  current_texture = SDL_CreateTextureFromSurface(current_renderer, img_surface);
-
-  if (current_texture == NULL) {
-    printf("could not load texture at path = %s\n", texture_path.c_str());
-  }
-  width = img_surface->w;
-  height = img_surface->h;
-}
-
-// Texture definitions end
-
-// background definitions begin
-void Background::Init() {
-  layers.clear();
-  scrolling_offset = 0;
-}
-void Background::AddLayer(std::string texture_path, SDL_Renderer* renderer) {
-  Texture new_texture(texture_path, renderer);
-  layers.push_back(new_texture);
-}
-void Background::Update(SDL_Event event) {
-  switch (event.type) {
-    case SDL_KEYDOWN:
-      switch (event.key.keysym.sym) {
-        case SDLK_LEFT:
-          scrolling_direction = DIR_LEFT;
-          break;
-        case SDLK_RIGHT:
-          scrolling_direction = DIR_RIGHT;
-          break;
-      }
-      break;
-    case SDL_KEYUP:
-      switch (event.key.keysym.sym) {
-        case SDLK_LEFT:
-          scrolling_direction = DIR_RIGHT;
-          break;
-        case SDLK_RIGHT:
-          scrolling_direction = DIR_LEFT;
-          break;
-      }
-      break;
-    default:
-      break;
-  }
-}
-
-// background definitions end
-
 // Scene definitions begin
 
 void Scene::Init() {
@@ -85,7 +16,7 @@ void Scene::Init() {
 
 void Scene::UpdateScrollingOffsets(int x, int y) {
   // updates scrolling offsets for all the backgrounds
-  scrolling_offset -= 1;
+  scrolling_offset -= 10;
   if (scrolling_offset < -SCREEN_WIDTH) {
     scrolling_offset = 0;
   }
@@ -105,10 +36,7 @@ void Scene::RenderBackgroundInternal(int x, int y) {
                    center, flip);
 }
 
-void Scene::RenderBackground() {
-  RenderBackgroundInternal(scrolling_offset, 0);
-  RenderBackgroundInternal(SCREEN_WIDTH + scrolling_offset, 0);
-}
+void Scene::RenderBackground() { scene_background.Render(); }
 
 void Scene::RenderEntities() {}
 
@@ -135,22 +63,20 @@ void Scene::UpdateCamera(int x, int y, int w, int h) {
 
 void Scene::LoadEntities(SDL_Renderer* renderer) {
   // Player 1
-
+  // Background new_background;
   current_renderer = renderer;
+  // scene_background = new_background;
   Entity player(PLAYER, 0, 240, 21, 33, 0, current_renderer);
   entities.push_back(player);
 
   // grab all the backgrounds
-  const std::string backgrounds_path[4] = {
+  const std::string backgrounds_names[5] = {
       "_11_background.png", "_10_distant_clouds.png", "_02_trees_bushes.png",
-      "_01_ground.png"};
-  for (int idx = 0; idx < 4; idx++) {
-    std::string background_path = "../assets/" + backgrounds_path[idx];
-    SDL_Texture* bg_texture =
-        IMG_LoadTexture(current_renderer, background_path.c_str());
-    if (bg_texture != NULL) {
-      backgrounds.push_back(bg_texture);
-    }
+      "_04_bushes.png", "_01_ground.png"};
+
+  for (int idx = 0; idx < 5; idx++) {
+    scene_background.AddLayer(backgrounds_names[idx], current_renderer,
+                              (idx + 1) * 10);
   }
 }
 
@@ -178,6 +104,8 @@ void Scene::Update(SDL_Event e) {
   UpdateCamera(delta_x, delta_y, player_w, player_h);
   // update scrolling offset
   UpdateScrollingOffsets(delta_x, delta_y);
+
+  scene_background.Update(e);
 }
 
 void Scene::Blit() {
