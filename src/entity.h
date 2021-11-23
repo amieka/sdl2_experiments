@@ -6,12 +6,8 @@
 
 #include <vector>
 
+#include "common.h"
 #include "texture.h"
-#define VELX 10
-
-enum EntityType { PLAYER, BACKGROUND };
-
-enum CurrentState { STILL, RUNNING };
 
 struct Entity {
   int x;
@@ -29,8 +25,7 @@ struct Entity {
   EntityType item_type;
   CurrentState current_state;
   SDL_Renderer* current_renderer;
-  std::vector<SDL_Rect> frames;
-  std::vector<SDL_Texture*> tex_frames;
+  std::vector<Texture> layers;
   void Init();
   void Blit();
   void Move();

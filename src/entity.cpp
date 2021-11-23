@@ -66,26 +66,10 @@ void Entity::UpdateState(SDL_Event event, CurrentState updated_state) {
 void Entity::Blit() {
   // copy texture
 
-  SDL_Rect dest;
-
-  dest.x = x;
-  dest.y = y;
-  dest.w = w;
-  dest.h = h;
-
-  SDL_RenderCopy(current_renderer, texture, NULL, &dest);
   // SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 }
 
-void Entity::Init() {
-  std::string asset_path = "../assets/run_0.png";
-  SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
-                 "Loading %s", asset_path.c_str());
-  texture = IMG_LoadTexture(current_renderer, asset_path.c_str());
-  if (texture == NULL) {
-    printf("texture not loaded\n");
-  }
-}
+void Entity::Init() {}
 
 int Entity::GetX() const { return x; }
 

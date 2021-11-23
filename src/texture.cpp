@@ -15,18 +15,15 @@ void Texture::RenderWithOffset(int x, int y) {
 void Texture::Render() {
   // render texture using a renderer
   // left
-  // if (scroll_direction == 0) {
-  //   RenderWithOffset(scroll_offset, 0);
-  //   RenderWithOffset(scroll_offset + SCREEN_WIDTH, 0);
-  // }
-  // // right
-  // if (scroll_direction == 1) {
-  //   RenderWithOffset(-scroll_offset, 0);
-  //   RenderWithOffset(-scroll_offset + SCREEN_WIDTH, 0);
-  // }
-
-  RenderWithOffset(scroll_offset, 0);
-  RenderWithOffset(scroll_offset + SCREEN_WIDTH, 0);
+  if (scroll_direction == 0) {
+    RenderWithOffset(scroll_offset, 0);
+    RenderWithOffset(scroll_offset - SCREEN_WIDTH, 0);
+  }
+  // right
+  if (scroll_direction == 1) {
+    RenderWithOffset(scroll_offset, 0);
+    RenderWithOffset(scroll_offset + SCREEN_WIDTH, 0);
+  }
 }
 
 int Texture::GetWidth() const { return width; }
@@ -69,12 +66,19 @@ void Texture::UpdateScrollOffset(SDL_Event event) {
     default:
       break;
   }
-  if (scroll_offset < -SCREEN_WIDTH) {
-    scroll_offset = 0;
+
+  // handle right scroll
+  if (scroll_direction == 1) {
+    if (scroll_offset < -SCREEN_WIDTH) {
+      scroll_offset = 0;
+    }
   }
 
-  if (scroll_offset > SCREEN_WIDTH) {
-    scroll_offset = 0;
+  // handle left scroll
+  if (scroll_direction == 0) {
+    if (scroll_offset > SCREEN_WIDTH) {
+      scroll_offset = 0;
+    }
   }
 
   Render();
