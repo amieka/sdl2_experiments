@@ -16,8 +16,6 @@ void Background::Update(SDL_Event event) {
     Texture tmp_texture = layers[i];
     tmp_texture.UpdateScrollOffset(event);
     layers[i] = tmp_texture;
-    printf("scroll direction from background : %u\n",
-           tmp_texture.scroll_direction);
   }
 }
 

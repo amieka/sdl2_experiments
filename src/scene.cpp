@@ -70,13 +70,17 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
   entities.push_back(player);
 
   // grab all the backgrounds
-  const std::string backgrounds_names[5] = {
-      "_11_background.png", "_10_distant_clouds.png", "_02_trees_bushes.png",
-      "_04_bushes.png", "_01_ground.png"};
+  int num_layers = 9;
+  const std::string backgrounds_names[9] = {
+      "_11_background.png", "_10_distant_clouds.png", "_09_distant_clouds1.png",
+      "_08_clouds.png",     "_05_hill1.png",          "_06_hill2.png",
+      "_04_bushes.png",     "_02_trees_bushes.png",   "_01_ground.png"};
 
-  for (int idx = 0; idx < 5; idx++) {
+  // const int scroll_speeds[9] = {10,20,30,40,50,60,70};
+
+  for (int idx = 0; idx < num_layers; idx++) {
     scene_background.AddLayer(backgrounds_names[idx], current_renderer,
-                              (idx + 1) * 10);
+                              (idx + 1) * 5);
   }
 }
 
