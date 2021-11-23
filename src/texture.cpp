@@ -25,8 +25,8 @@ void Texture::Render() {
   //   RenderWithOffset(-scroll_offset + SCREEN_WIDTH, 0);
   // }
 
-  RenderWithOffset(-scroll_offset, 0);
-  RenderWithOffset(-scroll_offset + SCREEN_WIDTH, 0);
+  RenderWithOffset(scroll_offset, 0);
+  RenderWithOffset(scroll_offset + SCREEN_WIDTH, 0);
 }
 
 int Texture::GetWidth() const { return width; }
@@ -58,17 +58,21 @@ void Texture::UpdateScrollOffset(SDL_Event event) {
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
           scroll_direction = DIR_LEFT;
-          scroll_offset -= (scroll_speed);
+          scroll_offset += (scroll_speed);
           break;
         case SDLK_RIGHT:
           scroll_direction = DIR_RIGHT;
-          scroll_offset += (scroll_speed);
+          scroll_offset -= (scroll_speed);
           break;
       }
       break;
     default:
       break;
   }
+  if (scroll_offset < -SCREEN_WIDTH) {
+    scroll_offset = 0;
+  }
+
   if (scroll_offset > SCREEN_WIDTH) {
     scroll_offset = 0;
   }

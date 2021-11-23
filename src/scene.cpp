@@ -76,11 +76,11 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
       "_08_clouds.png",     "_05_hill1.png",          "_06_hill2.png",
       "_04_bushes.png",     "_02_trees_bushes.png",   "_01_ground.png"};
 
-  // const int scroll_speeds[9] = {10,20,30,40,50,60,70};
+  const int scroll_speeds[9] = {0, 1, 2, 3, 5, 7, 9, 11, 30};
 
   for (int idx = 0; idx < num_layers; idx++) {
     scene_background.AddLayer(backgrounds_names[idx], current_renderer,
-                              (idx + 1) * 5);
+                              scroll_speeds[idx]);
   }
 }
 

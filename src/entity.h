@@ -5,6 +5,8 @@
 #include <SDL_image.h>
 
 #include <vector>
+
+#include "texture.h"
 #define VELX 10
 
 enum EntityType { PLAYER, BACKGROUND };
