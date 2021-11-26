@@ -8,6 +8,7 @@
 #define FPS 60.00
 
 #include "src/object.h"
+#include "src/player.h"
 #include "src/scene.h"
 
 struct Game {
@@ -63,6 +64,11 @@ void Game::Init() {
   player_textures.clear();
   // load all the player texture here
   Object* root = new Object("data.png", renderer);
+  Player* player_idle = new Player(renderer);
+  Player* player_walking = new Player(renderer);
+  player_walking->SetState(WALKING);
+  player_idle->Render(30, 30);
+  player_walking->Render(50, 50);
 }
 
 void Game::CreateScene() { current_scene.LoadEntities(renderer); }

@@ -4,6 +4,7 @@
 enum ScrollDirection { DIR_LEFT, DIR_RIGHT };
 enum EntityType { PLAYER, BACKGROUND };
 enum CurrentState { STILL, RUNNING };
+enum PlayerState { IDLE, WALKING, JUMP, ATTACK };
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 483
