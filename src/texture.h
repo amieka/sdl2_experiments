@@ -24,10 +24,20 @@ struct Texture {
   int GetWidth() const;
   int GetHeight() const;
   SDL_Texture* GetTexture() const;
+  SDL_Texture* GetTexture(int x, int y, int w, int h) const;
 
   int scroll_offset;
   int scroll_speed;
   ScrollDirection scroll_direction;
+
+  Texture(std::string texture_name, SDL_Renderer* renderer) {
+    // bad idea ? too many copies
+    current_renderer = renderer;
+    scroll_speed = 0;
+    scroll_offset = 0;
+    scroll_direction = DIR_LEFT;
+    Init(texture_name);
+  }
 
   Texture(std::string texture_name, SDL_Renderer* renderer, int speed) {
     // bad idea ? too many copies

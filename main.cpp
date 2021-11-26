@@ -10,6 +10,7 @@
 #include "src/object.h"
 #include "src/player.h"
 #include "src/scene.h"
+#include "src/texture.h"
 
 struct Game {
   SDL_Window* window;
@@ -18,7 +19,8 @@ struct Game {
   SDL_Texture* texture;
   int x, y;
   std::vector<SDL_Texture*> player_textures;
-
+  Player* player_idle;
+  Player* player_walking;
   void Init();
   void PrepareScene();
   void PresentScene();
@@ -36,12 +38,19 @@ struct Game {
 
 void Game::AnimatePlayer() {
   // get tick
-  Uint32 ticks = SDL_GetTicks();
-  Uint32 sprite = (ticks / 100) % 7;
-  SDL_Rect srcrect = {0, 0, 32, 64};
-  SDL_Rect dstrect = {10, 10, 32, 64};
-  SDL_Texture* t_texture = player_textures[sprite];
-  SDL_RenderCopy(renderer, t_texture, &srcrect, &dstrect);
+  // Uint32 ticks = SDL_GetTicks();
+  // Uint32 sprite = (ticks / 100) % 7;
+  // SDL_Rect srcrect = {0, 0, 32, 64};
+  // SDL_Rect dstrect = {10, 10, 32, 64};
+  // SDL_Texture* t_texture = player_textures[sprite];
+  // SDL_RenderCopy(renderer, t_texture, &srcrect, &dstrect);
+
+  if (player_walking != NULL) {
+    player_walking->Render(50, 50);
+  }
+  if (player_idle != NULL) {
+    player_idle->Render(300, 300);
+  }
 }
 
 void Game::Init() {
@@ -63,12 +72,12 @@ void Game::Init() {
 
   player_textures.clear();
   // load all the player texture here
-  Object* root = new Object("data.png", renderer);
-  Player* player_idle = new Player(renderer);
-  Player* player_walking = new Player(renderer);
+  Texture t("data.png", renderer);
+  player_idle = new Player(renderer);
+  player_idle->SetTexture(t.GetTexture());
+  player_walking = new Player(renderer);
+  player_walking->SetTexture(t.GetTexture());
   player_walking->SetState(WALKING);
-  player_idle->Render(30, 30);
-  player_walking->Render(50, 50);
 }
 
 void Game::CreateScene() { current_scene.LoadEntities(renderer); }

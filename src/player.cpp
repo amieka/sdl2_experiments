@@ -9,13 +9,43 @@ void Player::Init() {
 
 void Player::Render() {
   // do nothing yet
-  if (this->root_texture != NULL) {
-    printf("player texture can be rendered");
-  }
 }
+
+void Player::SetTexture(SDL_Texture* texture) { current_texture = texture; }
 
 void Player::Render(int x, int y) {
   // render at a certain x,y pos
+  printf("method called with : %d, %d \n", x, y);
+  Uint32 ticks = SDL_GetTicks();
+  if (player_state == 0) {
+    // render idle
+    Uint32 sprite_idx = (ticks / 100) % 11;
+    SDL_Rect t;
+    SDL_Rect dest;
+    dest.x = x;
+    dest.y = y;
+
+    t.x = IdleState[sprite_idx][0];
+    t.y = IdleState[sprite_idx][1];
+    t.w = dest.w = IdleState[sprite_idx][2];
+    t.h = dest.h = IdleState[sprite_idx][3];
+    // printf("sprite:idle idx: %d , pos_x: %d, pos_y: %d", sprite_idx, t.x,
+    // t.y);
+    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
+
+  } else {
+    // render walking
+    Uint32 sprite_idx = (ticks / 100) % 7;
+    SDL_Rect t;
+    SDL_Rect dest;
+    dest.x = x;
+    dest.y = y;
+    t.x = WalkingState[sprite_idx][0];
+    t.y = WalkingState[sprite_idx][1];
+    t.w = dest.w = WalkingState[sprite_idx][2];
+    t.h = dest.h = WalkingState[sprite_idx][3];
+    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
+  }
 }
 void Player::Move(SDL_Event e) {
   // do nothing yet

@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "common.h"
-#include "object.h"
 #include "texture.h"
 #define MAX_NUM_IMG_FRAMES 12
 
@@ -25,10 +24,11 @@ const int IdleState[][4] = {
     {114, 1449, 19, 34}, {133, 1449, 19, 34}, {152, 1449, 19, 34},
     {171, 1449, 19, 34}, {190, 1449, 19, 34}, {209, 1449, 19, 34}};
 
-class Player : public Object {
+class Player {
  private:
   PlayerState player_state;
   SDL_Renderer* current_renderer;
+  SDL_Texture* current_texture;
   std::map<int, std::vector<SDL_Rect> > layers_pair;
   float pos_x, pos_y;
   float velx, vely;
@@ -44,6 +44,7 @@ class Player : public Object {
   int GetX() const;
   int GetY() const;
   void SetState(PlayerState state);
+  void SetTexture(SDL_Texture* texture);
   void Render();
   void Render(int x, int y);
   void Move(SDL_Event e);

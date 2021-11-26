@@ -47,6 +47,16 @@ void Texture::Init(std::string texture_name) {
 
 SDL_Texture* Texture::GetTexture() const { return current_texture; }
 
+SDL_Texture* Texture::GetTexture(int x, int y, int w, int h) const {
+  SDL_Rect dest;
+  dest.x = x;
+  dest.y = y;
+  dest.w = w;
+  dest.h = h;
+  // SDL_QueryTexture(current_texture, NULL, NULL, &dest.w, &dest.h);
+  return current_texture;
+}
+
 void Texture::UpdateScrollOffset(SDL_Event event) {
   // update scrolling offset based on the direction
   // in which the player is moving

@@ -23,11 +23,11 @@ class Object {
     height = texture_surface->h;
     SDL_FreeSurface(texture_surface);
   }
-  virtual void Render() {}
-  virtual void Move(SDL_Event e) {}
-  virtual int GetX() const { return 0; }
-  virtual int GetY() const { return 0; }
-  virtual ~Object() {}
+  void Render() {}
+  void Move(SDL_Event e) {}
+  int GetX() const { return 0; }
+  int GetY() const { return 0; }
+  ~Object() {}
 };
 
 #endif
