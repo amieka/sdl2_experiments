@@ -13,7 +13,10 @@
 struct Texture {
   SDL_Renderer* current_renderer;
   SDL_Texture* current_texture;
+
+  SDL_Rect layer_rect;
   int width, height;
+
   void RenderWithOffset(int x, int y);
   void Render();
   void Init(std::string texture_path);
@@ -25,6 +28,7 @@ struct Texture {
   int scroll_offset;
   int scroll_speed;
   ScrollDirection scroll_direction;
+
   Texture(std::string texture_name, SDL_Renderer* renderer, int speed) {
     // bad idea ? too many copies
     current_renderer = renderer;

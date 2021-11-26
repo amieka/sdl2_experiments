@@ -1,7 +1,5 @@
 #include "entity.h"
 
-#include <string>
-
 // TODO: belongs else where
 std::string backgrounds[2] = {"_02_trees_bushes.png", "_02_trees_bushes.png"};
 
