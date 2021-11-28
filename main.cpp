@@ -106,7 +106,7 @@ void Game::PrepareScene() {
 void Game::PresentScene() {
   // LoadTexture();         // loads the background
   // current_scene.Blit();  // renders all the entities
-  // current_scene.RenderBackground();
+  current_scene.RenderBackground();
   AnimatePlayer();
   SDL_RenderPresent(renderer);
   SDL_UpdateWindowSurface(window);

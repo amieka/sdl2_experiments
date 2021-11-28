@@ -8,15 +8,20 @@
 #include <vector>
 
 #include "common.h"
+#include "event_observer.h"
 #include "texture.h"
 
-struct Background {
+struct Background : public EventObserver {
   std::vector<Texture> layers;
   int scrolling_offset;
+  SDL_Texture* current_texture;
   ScrollDirection scrolling_direction;
+  void UpdateScrollOffset();
   void Update(SDL_Event e);
+  void SetTexture(SDL_Texture* texture);
   void AddLayer(std::string texture_path, SDL_Renderer* renderer,
                 int scroll_speed);
+  void AddLayer(SDL_Rect rect, SDL_Renderer* renderer, int scroll_speed);
   void Init();
   void Render();
   Background() { Init(); }

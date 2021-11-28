@@ -8,7 +8,9 @@
 #include <vector>
 
 #include "common.h"
+#include "event_observer.h"
 #include "texture.h"
+
 #define MAX_NUM_IMG_FRAMES 12
 
 // const SDL_Rect StateLayers[4][] = {{SDL_Rect{0, 1449, 21, 33}}};
@@ -24,20 +26,33 @@ const int IdleState[][4] = {
     {114, 1449, 19, 34}, {133, 1449, 19, 34}, {152, 1449, 19, 34},
     {171, 1449, 19, 34}, {190, 1449, 19, 34}, {209, 1449, 19, 34}};
 
-class Player {
+class Player : public EventObserver {
  private:
   PlayerState player_state;
   SDL_Renderer* current_renderer;
   SDL_Texture* current_texture;
-  std::map<int, std::vector<SDL_Rect> > layers_pair;
-  float pos_x, pos_y;
+  std::map<int, std::vector<SDL_Rect> > state_texture_pair;
+  int pos_x, pos_y;
   float velx, vely;
 
  public:
+  Player(SDL_Renderer* renderer, int* rects[4]) {
+    current_renderer = renderer;
+    velx = vely = 0.00;
+    pos_x = pos_y = 0.00;
+    player_state = IDLE;
+  }
   Player(SDL_Renderer* renderer) {
     current_renderer = renderer;
     velx = vely = 0.00;
     pos_x = pos_y = 0.00;
+    player_state = IDLE;
+  }
+  Player(SDL_Renderer* renderer, int x, int y) {
+    current_renderer = renderer;
+    velx = vely = 0.00;
+    pos_x = x;
+    pos_y = y;
     player_state = IDLE;
   }
   void Init();
@@ -48,6 +63,7 @@ class Player {
   void Render();
   void Render(int x, int y);
   void Move(SDL_Event e);
+  void Update(SDL_Event e);
   ~Player() {}
 };
 

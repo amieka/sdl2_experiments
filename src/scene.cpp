@@ -12,6 +12,7 @@ void Scene::Init() {
   camera.h = SCREEN_HEIGHT;
   width = SCREEN_WIDTH;
   height = SCREEN_HEIGHT;
+  event_dispatcher = new EventDispatcher();
 }
 
 void Scene::UpdateScrollingOffsets(int x, int y) {
@@ -78,10 +79,25 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
 
   const int scroll_speeds[9] = {0, 1, 2, 3, 5, 7, 9, 11, 30};
 
+  // load an entire sprite
+  Texture sprite("data.png", renderer);
+
+  // define background rects
+  const int background_tex_rects[][4] = {
+      {0, 0, 640, 483},   {640, 0, 640, 483},   {1280, 0, 640, 483},
+      {0, 483, 640, 483}, {640, 483, 640, 483}, {1280, 483, 640, 483},
+      {0, 966, 640, 483}, {640, 966, 640, 483}, {1280, 966, 640, 483}};
+
+  // define player rects
   for (int idx = 0; idx < num_layers; idx++) {
     scene_background.AddLayer(backgrounds_names[idx], current_renderer,
                               scroll_speeds[idx]);
   }
+
+  // add backgrounds
+  // add players
+  player_idle = new Player(current_renderer, 100, 440);
+  event_dispatcher->Attach(player_idle);
 }
 
 std::vector<Entity> Scene::GetEntities() const { return entities; }

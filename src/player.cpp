@@ -57,3 +57,5 @@ void Player::SetState(PlayerState state) { player_state = state; }
 int Player::GetX() const { return 1; }
 
 int Player::GetY() const { return 2; }
+
+void Player::Update(SDL_Event e) {}

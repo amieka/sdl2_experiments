@@ -11,6 +11,8 @@
 #include "background.h"
 #include "common.h"
 #include "entity.h"
+#include "event_dispatcher.h"
+#include "player.h"
 
 struct Scene {
   int width;
@@ -23,6 +25,10 @@ struct Scene {
   SDL_Renderer* current_renderer;
   SDL_Texture* current_texture;
   std::vector<Entity> GetEntities() const;
+  std::vector<Player> players;
+  Player* player_idle;
+  Player* player_walking;
+  EventDispatcher* event_dispatcher;
   void RenderBackground();
   void RenderBackgroundInternal(int x, int y);
   void RenderEntities();
