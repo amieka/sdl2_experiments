@@ -11,7 +11,7 @@
 #include "event_observer.h"
 #include "texture.h"
 
-struct Background : public EventObserver {
+struct Background {
   std::vector<Texture> layers;
   int scrolling_offset;
   SDL_Texture* current_texture;

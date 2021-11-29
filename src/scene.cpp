@@ -37,7 +37,10 @@ void Scene::RenderBackgroundInternal(int x, int y) {
                    center, flip);
 }
 
-void Scene::RenderBackground() { scene_background.Render(); }
+void Scene::RenderBackground() {
+  scene_background.Render();
+  event_dispatcher->Notify();
+}
 
 void Scene::RenderEntities() {}
 
@@ -97,11 +100,18 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
   // add backgrounds
   // add players
   player_idle = new Player(current_renderer, 100, 440);
+  player_idle->SetTexture(sprite.GetTexture());
   event_dispatcher->Attach(player_idle);
 }
 
 std::vector<Entity> Scene::GetEntities() const { return entities; }
 
+void Scene::UpdateOnEvent(SDL_Event e) {
+  scene_background.Render();
+  event_dispatcher->Notify(e);
+}
+
+// Not used
 void Scene::Update(SDL_Event e) {
   Entity current;
   int delta_x, delta_y, player_w, player_h;

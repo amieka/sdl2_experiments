@@ -84,7 +84,7 @@ void Game::CreateScene() { current_scene.LoadEntities(renderer); }
 
 void Game::UpdateScene(SDL_Event e) {
   // update game state for all the entities
-  current_scene.Update(e);
+  current_scene.UpdateOnEvent(e);
 }
 
 void Game::LoadTexture() {
@@ -107,7 +107,7 @@ void Game::PresentScene() {
   // LoadTexture();         // loads the background
   // current_scene.Blit();  // renders all the entities
   current_scene.RenderBackground();
-  AnimatePlayer();
+  // AnimatePlayer();
   SDL_RenderPresent(renderer);
   SDL_UpdateWindowSurface(window);
 }
