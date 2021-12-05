@@ -33,9 +33,10 @@ class Player : public EventObserver {
   SDL_Texture* current_texture;
   std::map<int, std::vector<SDL_Rect> > state_texture_pair;
   int pos_x, pos_y;
+  int width, height;
   float velx, vely;
   int walking_sprite_idx;
-  bool move_dir[2] = {0, 0};
+  bool move_dir[2];
 
  public:
   Player(SDL_Renderer* renderer, int* rects[4]) {
@@ -44,6 +45,8 @@ class Player : public EventObserver {
     pos_x = pos_y = 0.00;
     player_state = IDLE;
     walking_sprite_idx = 0;
+    move_dir[0] = 0;
+    move_dir[1] = 0;
   }
   Player(SDL_Renderer* renderer) {
     current_renderer = renderer;
@@ -51,6 +54,8 @@ class Player : public EventObserver {
     pos_x = pos_y = 0.00;
     player_state = IDLE;
     walking_sprite_idx = 0;
+    move_dir[0] = 0;
+    move_dir[1] = 0;
   }
   Player(SDL_Renderer* renderer, int x, int y) {
     current_renderer = renderer;
@@ -59,14 +64,18 @@ class Player : public EventObserver {
     pos_y = y;
     player_state = IDLE;
     walking_sprite_idx = 0;
+    move_dir[0] = 0;
+    move_dir[1] = 0;
   }
   void Init();
   int GetX() const;
   int GetY() const;
+  int GetWidth() const;
+  int GetHeight() const;
+  bool* ScrollDir();
   void SetState(PlayerState state);
   void SetTexture(SDL_Texture* texture);
   void Render();
-  void Render(int x, int y);
   void Move();
   void Update(SDL_Event e);
   void Update();

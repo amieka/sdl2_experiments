@@ -37,3 +37,21 @@ void Background::Render() {
     tmp_texture.Render();
   }
 }
+
+void Background::Render(int x, int y, bool* scroll_dir) {
+  for (int i = 0; i < layers.size(); i++) {
+    Texture texture = layers[i];
+
+    if (scroll_dir[0] == 1) {
+      // moving left
+      texture.RenderWithOffset(x, 0);
+      texture.RenderWithOffset(x - SCREEN_WIDTH, 0);
+    }
+
+    if (scroll_dir[1] == 1) {
+      // moving right
+      texture.RenderWithOffset(-1 * x, 0);
+      texture.RenderWithOffset(-1 * x + SCREEN_WIDTH, 0);
+    }
+  }
+}

@@ -24,6 +24,7 @@ struct Background {
   void AddLayer(SDL_Rect rect, SDL_Renderer* renderer, int scroll_speed);
   void Init();
   void Render();
+  void Render(int x, int y, bool* scroll_dir);
   Background() { Init(); }
 };
 

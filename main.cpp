@@ -1,17 +1,11 @@
 
-#include <SDL2/SDL.h>
-#include <SDL_image.h>
-#include <string.h>
 
 #include <iostream>
-#include <vector>
 
 #include "src/game.h"
 
 int main() {
-  Scene scene;
-
-  Game game(scene);
+  Game game;
   game.CreateScene();
 
   while (1) {

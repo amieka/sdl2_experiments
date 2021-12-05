@@ -30,7 +30,6 @@ struct Scene {
   Player* player_walking;
   EventDispatcher* event_dispatcher;
   void RenderBackground();
-  void RenderBackgroundInternal(int x, int y);
   void RenderEntities();
   void UpdateScrollingOffsets(int x, int y);
   void LoadEntities(SDL_Renderer* renderer);

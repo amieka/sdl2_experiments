@@ -12,6 +12,6 @@ enum PlayerState { IDLE, WALKING, JUMP, ATTACK };
 #define LEVEL_WIDTH 1200
 #define LEVEL_HEIGHT 960
 
-#define VELX 10
+#define VELX 2
 
 #endif

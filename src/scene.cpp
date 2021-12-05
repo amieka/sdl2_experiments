@@ -23,23 +23,14 @@ void Scene::UpdateScrollingOffsets(int x, int y) {
   }
 }
 
-void Scene::RenderBackgroundInternal(int x, int y) {
-  SDL_Rect renderQuad = {x, y, 640, 483};
-  SDL_Point* center = NULL;
-  SDL_RendererFlip flip = SDL_FLIP_NONE;
-  SDL_RenderCopyEx(current_renderer, backgrounds[0], NULL, &renderQuad, 0.00,
-                   center, flip);
-  SDL_RenderCopyEx(current_renderer, backgrounds[1], NULL, &renderQuad, 0.00,
-                   center, flip);
-  SDL_RenderCopyEx(current_renderer, backgrounds[2], NULL, &renderQuad, 0.00,
-                   center, flip);
-  SDL_RenderCopyEx(current_renderer, backgrounds[3], NULL, &renderQuad, 0.00,
-                   center, flip);
-}
-
 void Scene::RenderBackground() {
+  // scene_background.Render();
+  // event_dispatcher->Notify();
+  // UpdateCamera(player_idle->GetX(), player_idle->GetY(),
+  //              player_idle->GetWidth(), player_idle->GetHeight());
+  // scene_background.Render(camera.x, camera.y, player_idle->ScrollDir());
   scene_background.Render();
-  event_dispatcher->Notify();
+  player_idle->Render();
 }
 
 void Scene::RenderEntities() {}
@@ -55,7 +46,7 @@ void Scene::UpdateCamera(int x, int y, int w, int h) {
     camera.y = 0;
   }
 
-  if (camera.x > LEVEL_WIDTH - camera.w) {
+  if (camera.x > SCREEN_WIDTH - camera.w) {
     camera.x = LEVEL_WIDTH - camera.w;
   }
   if (camera.y > LEVEL_HEIGHT - camera.h) {
@@ -113,29 +104,17 @@ void Scene::UpdateOnEvent(SDL_Event e) {
 
 // Not used
 void Scene::Update(SDL_Event e) {
-  Entity current;
-  int delta_x, delta_y, player_w, player_h;
-  for (int idx = 0; idx < entities.size(); idx++) {
-    current = entities[idx];
-    // printf("entity type : %u\n", current.item_type);
-    if (current.item_type == 0) {
-      current.UpdateState(e, RUNNING);
-      current.Move();
-    }
-
-    delta_x = current.GetX();
-    delta_y = current.GetY();
-    entities[idx].x = delta_x;
-    entities[idx].y = delta_y;
-    player_w = entities[idx].w;
-    player_h = entities[idx].h;
-  }
+  player_idle->Update(e);
+  player_idle->Move();
   // update camera
-  UpdateCamera(delta_x, delta_y, player_w, player_h);
+  // UpdateCamera(player_idle->GetX(), player_idle->GetY(),
+  //              player_idle->GetWidth(), player_idle->GetHeight());
+  // UpdateCamera(delta_x, delta_y, player_w, player_h);
   // update scrolling offset
-  UpdateScrollingOffsets(delta_x, delta_y);
+  // UpdateScrollingOffsets(player_idle->GetX(), player_idle->GetY());
 
   scene_background.Update(e);
+  player_idle->Render();
 }
 
 void Scene::Blit() {
