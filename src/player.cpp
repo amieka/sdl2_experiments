@@ -2,6 +2,9 @@
 
 void Player::Init() {}
 
+// SDL_Rect Player::GetBounds() const { return; }
+bool Player::CanCollide(SDL_Rect other) { return false; }
+
 void Player::Move() {
   if (move_dir[0]) {
     pos_x -= VELX;
@@ -11,9 +14,44 @@ void Player::Move() {
   }
   if (move_dir[1]) {
     pos_x += VELX;
-    if (pos_x > SCREEN_WIDTH) {
-      pos_x = SCREEN_WIDTH;
+    if (pos_x + width > SCREEN_WIDTH / 2) {
+      pos_x = SCREEN_WIDTH / 2 + width;
     }
+  }
+}
+
+void Player::Render(int camera_x, int camera_y) {
+  Uint32 ticks = SDL_GetTicks();
+
+  // SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL | move_dir[0];
+
+  if (player_state == 0) {
+    // render idle
+    Uint32 sprite_idx = (ticks / 100) % 11;
+    SDL_Rect t;
+    SDL_Rect dest;
+    dest.x = pos_x;
+    dest.y = pos_y;
+
+    t.x = IdleState[sprite_idx][0] - camera_x;
+    t.y = IdleState[sprite_idx][1];
+    t.w = dest.w = width = IdleState[sprite_idx][2];
+    t.h = dest.h = height = IdleState[sprite_idx][3];
+
+    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
+
+  } else {
+    // render walking
+    Uint32 sprite_idx = (ticks / 100) % 7;
+    SDL_Rect t;
+    SDL_Rect dest;
+    dest.x = pos_x;
+    dest.y = pos_y;
+    t.x = WalkingState[sprite_idx][0] - camera_x;
+    t.y = WalkingState[sprite_idx][1];
+    t.w = dest.w = width = WalkingState[sprite_idx][2];
+    t.h = dest.h = height = WalkingState[sprite_idx][3];
+    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
   }
 }
 

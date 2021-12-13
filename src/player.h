@@ -72,10 +72,13 @@ class Player : public EventObserver {
   int GetY() const;
   int GetWidth() const;
   int GetHeight() const;
+  // SDL_Rect GetBounds() const;
+  bool CanCollide(SDL_Rect other);
   bool* ScrollDir();
   void SetState(PlayerState state);
   void SetTexture(SDL_Texture* texture);
   void Render();
+  void Render(int camera_x, int camera_y);
   void Move();
   void Update(SDL_Event e);
   void Update();

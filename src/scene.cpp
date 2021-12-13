@@ -24,11 +24,6 @@ void Scene::UpdateScrollingOffsets(int x, int y) {
 }
 
 void Scene::RenderBackground() {
-  // scene_background.Render();
-  // event_dispatcher->Notify();
-  // UpdateCamera(player_idle->GetX(), player_idle->GetY(),
-  //              player_idle->GetWidth(), player_idle->GetHeight());
-  // scene_background.Render(camera.x, camera.y, player_idle->ScrollDir());
   scene_background.Render();
   player_idle->Render();
 }
@@ -46,20 +41,23 @@ void Scene::UpdateCamera(int x, int y, int w, int h) {
     camera.y = 0;
   }
 
-  if (camera.x > SCREEN_WIDTH - camera.w) {
+  if (camera.x > LEVEL_WIDTH - camera.w) {
     camera.x = LEVEL_WIDTH - camera.w;
   }
   if (camera.y > LEVEL_HEIGHT - camera.h) {
     camera.y = LEVEL_HEIGHT - camera.h;
   }
 
-  printf("camera_x: %d, camera_y: %d\n", camera.x, camera.y);
+  // printf("camera_x: %d, camera_y: %d\n", camera.x, camera.y);
 }
 
 void Scene::LoadEntities(SDL_Renderer* renderer) {
   // Player 1
   // Background new_background;
+  // load an entire sprite
+  Texture sprite("data.png", renderer);
   current_renderer = renderer;
+  scene_background.SetRenderer(renderer);
   // scene_background = new_background;
   Entity player(PLAYER, 0, 240, 21, 33, 0, current_renderer);
   entities.push_back(player);
@@ -73,24 +71,29 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
 
   const int scroll_speeds[9] = {0, 1, 2, 3, 5, 7, 9, 11, 30};
 
-  // load an entire sprite
-  Texture sprite("data.png", renderer);
-
   // define background rects
   const int background_tex_rects[][4] = {
       {0, 0, 640, 483},   {640, 0, 640, 483},   {1280, 0, 640, 483},
       {0, 483, 640, 483}, {640, 483, 640, 483}, {1280, 483, 640, 483},
       {0, 966, 640, 483}, {640, 966, 640, 483}, {1280, 966, 640, 483}};
 
-  // define player rects
+  scene_background.SetTexture(sprite.GetTexture());
   for (int idx = 0; idx < num_layers; idx++) {
-    scene_background.AddLayer(backgrounds_names[idx], current_renderer,
-                              scroll_speeds[idx]);
+    Layer new_layer;
+    new_layer.scroll_speed = scroll_speeds[idx];
+    new_layer.scrolling_offset = 0;
+    SDL_Rect r;
+    r.x = background_tex_rects[idx][0];
+    r.y = background_tex_rects[idx][1];
+    r.w = background_tex_rects[idx][2];
+    r.h = background_tex_rects[idx][3];
+    new_layer.rect = r;
+    scene_background.AddLayer(new_layer);
   }
 
   // add backgrounds
   // add players
-  player_idle = new Player(current_renderer, 100, 440);
+  player_idle = new Player(current_renderer, 100, 350);
   player_idle->SetTexture(sprite.GetTexture());
   event_dispatcher->Attach(player_idle);
 }
@@ -107,11 +110,8 @@ void Scene::Update(SDL_Event e) {
   player_idle->Update(e);
   player_idle->Move();
   // update camera
-  // UpdateCamera(player_idle->GetX(), player_idle->GetY(),
-  //              player_idle->GetWidth(), player_idle->GetHeight());
-  // UpdateCamera(delta_x, delta_y, player_w, player_h);
-  // update scrolling offset
-  // UpdateScrollingOffsets(player_idle->GetX(), player_idle->GetY());
+  UpdateCamera(player_idle->GetX(), player_idle->GetY(),
+               player_idle->GetWidth(), player_idle->GetHeight());
 
   scene_background.Update(e);
   player_idle->Render();

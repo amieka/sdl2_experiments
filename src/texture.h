@@ -10,6 +10,12 @@
 
 #include "common.h"
 
+struct Layer {
+  SDL_Rect rect;
+  int scroll_speed;
+  int scrolling_offset;
+};
+
 struct Texture {
   SDL_Renderer* current_renderer;
   SDL_Texture* current_texture;
