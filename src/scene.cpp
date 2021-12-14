@@ -58,16 +58,9 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
   Texture sprite("data.png", renderer);
   current_renderer = renderer;
   scene_background.SetRenderer(renderer);
-  // scene_background = new_background;
-  Entity player(PLAYER, 0, 240, 21, 33, 0, current_renderer);
-  entities.push_back(player);
 
   // grab all the backgrounds
   int num_layers = 9;
-  const std::string backgrounds_names[9] = {
-      "_11_background.png", "_10_distant_clouds.png", "_09_distant_clouds1.png",
-      "_08_clouds.png",     "_05_hill1.png",          "_06_hill2.png",
-      "_04_bushes.png",     "_02_trees_bushes.png",   "_01_ground.png"};
 
   const int scroll_speeds[9] = {0, 1, 2, 3, 5, 7, 9, 11, 30};
 
@@ -80,7 +73,7 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
   scene_background.SetTexture(sprite.GetTexture());
   for (int idx = 0; idx < num_layers; idx++) {
     Layer new_layer;
-    new_layer.scroll_speed = scroll_speeds[idx];
+    new_layer.scroll_speed = scroll_speeds[num_layers - idx - 1];
     new_layer.scrolling_offset = 0;
     SDL_Rect r;
     r.x = background_tex_rects[idx][0];
@@ -100,11 +93,6 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
 
 std::vector<Entity> Scene::GetEntities() const { return entities; }
 
-void Scene::UpdateOnEvent(SDL_Event e) {
-  scene_background.Render();
-  event_dispatcher->Notify(e);
-}
-
 // Not used
 void Scene::Update(SDL_Event e) {
   player_idle->Update(e);
@@ -115,13 +103,6 @@ void Scene::Update(SDL_Event e) {
 
   scene_background.Update(e);
   player_idle->Render();
-}
-
-void Scene::Blit() {
-  for (int idx = 0; idx < entities.size(); idx++) {
-    Entity current = entities[idx];
-    current.Render(camera.x, camera.y);
-  }
 }
 
 // Scene definitions end

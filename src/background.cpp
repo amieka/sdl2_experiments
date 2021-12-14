@@ -4,6 +4,7 @@ void Background::Init() {
   layers.clear();
   layer_rects.clear();
   scrolling_offset = 0;
+  scrolling_direction = DIR_LEFT;
 }
 
 void Background::SetRenderer(SDL_Renderer* r) { current_renderer = r; }
@@ -52,20 +53,12 @@ void Background::AddLayer(std::string texture_path, SDL_Renderer* renderer,
 void Background::AddLayer(Layer new_layer) { layer_rects.push_back(new_layer); }
 
 void Background::Update(SDL_Event event) {
-  for (int i = 0; i < layer_rects.size(); i++) {
-    Layer tmp_layer = layer_rects[i];
+  int s = layer_rects.size();
+  for (int i = 0; i < s; i++) {
+    Layer tmp_layer = layer_rects[s - i - 1];
+
     UpdateScrollOffset(event, tmp_layer);
-
-    if (scrolling_direction == 0) {
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset, 0);
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset - SCREEN_WIDTH, 0);
-    }
-    if (scrolling_direction == 1) {
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset, 0);
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset - SCREEN_WIDTH, 0);
-    }
-
-    // printf("scrolling offset :: %d \n", tmp_layer.scrolling_offset);
+    layer_rects[s - i - 1] = tmp_layer;
   }
 }
 
@@ -75,7 +68,15 @@ void Background::Render() {
   int s = layer_rects.size();
   for (int i = 0; i < layer_rects.size(); i++) {
     Layer tmp_layer = layer_rects[s - i - 1];
-    RenderLayer(tmp_layer, 0, 0);
+    // RenderLayer(tmp_layer, 0, 0);
+    if (scrolling_direction == 0) {
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset, 0);
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset - SCREEN_WIDTH, 0);
+    }
+    if (scrolling_direction == 1) {
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset, 0);
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset + SCREEN_WIDTH, 0);
+    }
   }
 }
 

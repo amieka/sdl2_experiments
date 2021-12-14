@@ -34,9 +34,7 @@ struct Scene {
   void UpdateScrollingOffsets(int x, int y);
   void LoadEntities(SDL_Renderer* renderer);
   void Init();
-  void Blit();
   void Update(SDL_Event e);
-  void UpdateOnEvent(SDL_Event e);
   void UpdateCamera(int x, int y, int w, int h);
   Scene() { Init(); }
 };
