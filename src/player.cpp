@@ -15,7 +15,7 @@ void Player::Move() {
   if (move_dir[1]) {
     pos_x += VELX;
     if (pos_x + width > SCREEN_WIDTH / 2) {
-      pos_x = SCREEN_WIDTH / 2 + width;
+      pos_x = SCREEN_WIDTH / 2;
     }
   }
 }

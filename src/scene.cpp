@@ -75,6 +75,8 @@ void Scene::LoadEntities(SDL_Renderer* renderer) {
     Layer new_layer;
     new_layer.scroll_speed = scroll_speeds[num_layers - idx - 1];
     new_layer.scrolling_offset = 0;
+    new_layer.scrolling_offset_right = 0;
+    new_layer.scrolling_offset_left = 0;
     SDL_Rect r;
     r.x = background_tex_rects[idx][0];
     r.y = background_tex_rects[idx][1];

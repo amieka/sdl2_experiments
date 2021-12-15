@@ -14,6 +14,8 @@ struct Layer {
   SDL_Rect rect;
   int scroll_speed;
   int scrolling_offset;
+  int scrolling_offset_right;
+  int scrolling_offset_left;
 };
 
 struct Texture {

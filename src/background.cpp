@@ -15,29 +15,27 @@ void Background::UpdateScrollOffset(SDL_Event event, Layer& current_layer) {
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
           scrolling_direction = DIR_LEFT;
-          current_layer.scrolling_offset += (current_layer.scroll_speed);
+          current_layer.scrolling_offset_left += (current_layer.scroll_speed);
           break;
         case SDLK_RIGHT:
           scrolling_direction = DIR_RIGHT;
-          current_layer.scrolling_offset -= (current_layer.scroll_speed);
+          current_layer.scrolling_offset_right -= (current_layer.scroll_speed);
           break;
       }
-      break;
-    default:
       break;
   }
 
   // handle right scroll
   if (scrolling_direction == 1) {
-    if (current_layer.scrolling_offset < -SCREEN_WIDTH) {
-      current_layer.scrolling_offset = 0;
+    if (current_layer.scrolling_offset_right < -SCREEN_WIDTH) {
+      current_layer.scrolling_offset_right = 0;
     }
   }
 
   // handle left scroll
   if (scrolling_direction == 0) {
-    if (current_layer.scrolling_offset > SCREEN_WIDTH) {
-      current_layer.scrolling_offset = 0;
+    if (current_layer.scrolling_offset_left > SCREEN_WIDTH) {
+      current_layer.scrolling_offset_left = 0;
     }
   }
 }
@@ -70,12 +68,13 @@ void Background::Render() {
     Layer tmp_layer = layer_rects[s - i - 1];
     // RenderLayer(tmp_layer, 0, 0);
     if (scrolling_direction == 0) {
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset, 0);
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset - SCREEN_WIDTH, 0);
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset_left, 0);
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset_left - SCREEN_WIDTH, 0);
     }
     if (scrolling_direction == 1) {
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset, 0);
-      RenderLayer(tmp_layer, tmp_layer.scrolling_offset + SCREEN_WIDTH, 0);
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset_right, 0);
+      RenderLayer(tmp_layer, tmp_layer.scrolling_offset_right + SCREEN_WIDTH,
+                  0);
     }
   }
 }
