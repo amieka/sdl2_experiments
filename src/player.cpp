@@ -22,14 +22,16 @@ void Player::Move() {
 
 void Player::Render(int camera_x, int camera_y) {
   Uint32 ticks = SDL_GetTicks();
-
-  // SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL | move_dir[0];
-
+  SDL_RendererFlip flip = SDL_FLIP_NONE;
+  if ((move_dir[0]) == 1 || (move_dir[1]) == 0) {
+    flip = SDL_FLIP_VERTICAL;
+  }
+  SDL_Rect t;
+  SDL_Rect dest;
   if (player_state == 0) {
     // render idle
     Uint32 sprite_idx = (ticks / 100) % 11;
-    SDL_Rect t;
-    SDL_Rect dest;
+
     dest.x = pos_x;
     dest.y = pos_y;
 
@@ -38,31 +40,35 @@ void Player::Render(int camera_x, int camera_y) {
     t.w = dest.w = width = IdleState[sprite_idx][2];
     t.h = dest.h = height = IdleState[sprite_idx][3];
 
-    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
-
   } else {
     // render walking
     Uint32 sprite_idx = (ticks / 100) % 7;
-    SDL_Rect t;
-    SDL_Rect dest;
     dest.x = pos_x;
     dest.y = pos_y;
     t.x = WalkingState[sprite_idx][0] - camera_x;
     t.y = WalkingState[sprite_idx][1];
     t.w = dest.w = width = WalkingState[sprite_idx][2];
     t.h = dest.h = height = WalkingState[sprite_idx][3];
-    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
   }
+
+  SDL_Point* center = NULL;
+
+  SDL_RenderCopyEx(current_renderer, current_texture, &t, &dest, 0.00, center,
+                   flip);
 }
 
 void Player::Render() {
   Uint32 ticks = SDL_GetTicks();
-
+  SDL_Rect t;
+  SDL_Rect dest;
+  SDL_RendererFlip flip = SDL_FLIP_NONE;
+  if ((move_dir[0]) == 1 || (move_dir[1]) == 0) {
+    flip = SDL_FLIP_HORIZONTAL;
+  }
   if (player_state == 0) {
     // render idle
     Uint32 sprite_idx = (ticks / 100) % 11;
-    SDL_Rect t;
-    SDL_Rect dest;
+
     dest.x = pos_x;
     dest.y = pos_y;
 
@@ -71,21 +77,24 @@ void Player::Render() {
     t.w = dest.w = width = IdleState[sprite_idx][2];
     t.h = dest.h = height = IdleState[sprite_idx][3];
 
-    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
+    // SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
 
   } else {
     // render walking
     Uint32 sprite_idx = (ticks / 100) % 7;
-    SDL_Rect t;
-    SDL_Rect dest;
     dest.x = pos_x;
     dest.y = pos_y;
     t.x = WalkingState[sprite_idx][0];
     t.y = WalkingState[sprite_idx][1];
     t.w = dest.w = width = WalkingState[sprite_idx][2];
     t.h = dest.h = height = WalkingState[sprite_idx][3];
-    SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
+    // SDL_RenderCopy(current_renderer, current_texture, &t, &dest);
   }
+
+  SDL_Point* center = NULL;
+
+  SDL_RenderCopyEx(current_renderer, current_texture, &t, &dest, 0.00, center,
+                   flip);
 }
 
 void Player::SetTexture(SDL_Texture* texture) { current_texture = texture; }
