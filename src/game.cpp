@@ -9,8 +9,12 @@
 #include "scene.h"
 #include "texture.h"
 
+const int SCREEN_FPS = 60;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
 void Game::Init() {
   current_scene = new Scene();
+  frames_so_far = 0;
   IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cout << "Failed to initialize the SDL2 library\n";
@@ -54,6 +58,14 @@ void Game::HandleInput() {
     if (event.type == SDL_QUIT) {
       exit(0);
     }
+    frames_so_far++;
     UpdateScene(event);
+    ComputeFps();
   }
+}
+
+void Game::ComputeFps() {
+  Uint32 ticks = SDL_GetTicks();
+  float fps_average = frames_so_far / (ticks / 1000.f);
+  // printf("avaerage fps %f", fps_average);
 }
