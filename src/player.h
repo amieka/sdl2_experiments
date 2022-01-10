@@ -9,8 +9,8 @@
 
 #include "common.h"
 #include "event_observer.h"
+#include "player_action.h"
 #include "texture.h"
-
 #define MAX_NUM_IMG_FRAMES 12
 
 // const SDL_Rect StateLayers[4][] = {{SDL_Rect{0, 1449, 21, 33}}};
@@ -29,6 +29,7 @@ const int IdleState[][4] = {
 class Player : public EventObserver {
  private:
   PlayerState player_state;
+  PlayerAction* player_action;
   SDL_Renderer* current_renderer;
   SDL_Texture* current_texture;
   std::map<int, std::vector<SDL_Rect> > state_texture_pair;
@@ -47,6 +48,7 @@ class Player : public EventObserver {
     walking_sprite_idx = 0;
     move_dir[0] = 0;
     move_dir[1] = 0;
+    Init();
   }
   Player(SDL_Renderer* renderer) {
     current_renderer = renderer;
@@ -56,6 +58,7 @@ class Player : public EventObserver {
     walking_sprite_idx = 0;
     move_dir[0] = 0;
     move_dir[1] = 0;
+    Init();
   }
   Player(SDL_Renderer* renderer, int x, int y) {
     current_renderer = renderer;
@@ -66,6 +69,7 @@ class Player : public EventObserver {
     walking_sprite_idx = 0;
     move_dir[0] = 0;
     move_dir[1] = 0;
+    Init();
   }
   void Init();
   int GetX() const;

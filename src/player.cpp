@@ -1,6 +1,6 @@
 #include "player.h"
 
-void Player::Init() {}
+void Player::Init() { player_action = new PlayerAction(); }
 
 // SDL_Rect Player::GetBounds() const { return; }
 bool Player::CanCollide(SDL_Rect other) { return false; }
@@ -115,14 +115,11 @@ void Player::Update(SDL_Event event) {
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
           move_dir[0] = 1;
-          player_state = WALKING;
-          // velx -= VELX;
-
+          SetState(WALKING);
           break;
         case SDLK_RIGHT:
-          player_state = WALKING;
+          SetState(WALKING);
           move_dir[1] = 1;
-          // velx += VELX;
           break;
       }
       break;
@@ -131,11 +128,11 @@ void Player::Update(SDL_Event event) {
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
           move_dir[0] = 0;
-          player_state = IDLE;
+          SetState(IDLE);
           break;
         case SDLK_RIGHT:
           move_dir[1] = 0;
-          player_state = IDLE;
+          SetState(IDLE);
           break;
       }
       break;
